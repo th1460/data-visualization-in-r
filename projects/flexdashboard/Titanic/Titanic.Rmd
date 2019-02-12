@@ -1,0 +1,113 @@
+---
+title: "Titanic"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(dplyr)
+library(titanic)
+library(ggplot2)
+library(plotly)
+library(glue)
+library(DT)
+library(leaflet)
+```
+
+Sidebar {.sidebar}
+-----------------------------------------------------------------------
+
+<h3>Análise dos dados do Titanic</h3>
+
+<p align="justify">
+Este dashboard apresenta uma análise descritiva com uma parte dos dados dos **passageiros do naufrágio do Titanic**. Algumas das informações são: 
+
+- Survived: sobreviveu (1) ou não (0)
+- Pclass: classe (1, 2 ou 3)
+- Name: nome
+- Sex: sexo
+- Age: idade
+- Embarked: porto de embarcação (C: Cherbourg, Q: Queenstown ou S: Southampton)
+</p>
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Tabela com as principais variáveis dos passageiros
+
+```{r}
+
+titanic_train %>% 
+  select(PassengerId:Age, Embarked) %>% 
+  datatable(rownames = FALSE)
+
+```
+
+### Portos de embarcação e local do naufrágio
+
+```{r}
+
+ports <- bind_rows(
+  tibble(codeloc = "C", location = "Cherbourg (10-04-1912)", long = -1.6109, lat = 49.6445),
+  tibble(codeloc = "Q", location = "Queenstown (11-04-1912)", long = -8.3211, lat = 51.8535),
+  tibble(codeloc = "S", location = "Southampton (10-04-1912)", long = -1.4191, lat = 50.7894)
+)
+
+ports %>% 
+  leaflet() %>% 
+  addTiles() %>%
+  addCircleMarkers(~long, ~lat, popup = ~location, label = ~location) %>% 
+  addMarkers(lng = -49.9408, lat = 41.7258, 
+             icon = makeIcon("sinking-ship.jpg", 50, 50),
+             label = "Naufrágio (14-04-1912)") %>% 
+  addCircleMarkers(lng = -73.9655, lat = 40.6832, popup = "New York", label = "New York", color = "green")
+
+```
+
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Percentual de sobrevivência
+
+```{r}
+
+titanic_train %>% 
+  group_by(Survived) %>% 
+  summarise(n = n()) %>% 
+  mutate(perc = n/sum(n) * 100) %>% 
+  plot_ly(labels = ~factor(Survived, labels = c("Não sobreviveu", "Sobreviveu")), 
+          values = ~perc, type = "pie",
+          textinfo = "percent+label",
+          hoverinfo = "percent+label") %>%
+  layout(showlegend = F, font = list(size = 12))
+  
+```
+
+### A relação entre sexo, sobrevivência e classe
+
+```{r}
+
+g1 <- titanic_train %>% 
+  group_by(Survived, Sex, Pclass) %>% summarise(n = n()) %>% 
+  group_by(Survived, Pclass) %>% mutate(perc = n/sum(n)) %>%
+  ggplot(aes(as.factor(Survived), weight = perc, fill = Sex, 
+             text = glue("{Sex} <br> {(perc * 100) %>% round(2)}%"))) + 
+  geom_bar(alpha = .6, position = "fill") +
+  facet_grid(~ Pclass) +
+  scale_x_discrete(labels = c("Não", "Sim")) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "", y = "", fill = "") + 
+  theme_light() +
+  theme(plot.margin = unit(c(1, 1, 1, 1), "cm"))
+
+ggplotly(g1, tooltip = "text") %>% config(displayModeBar = FALSE) %>% 
+  layout(hovermode = TRUE, 
+         xaxis = list(title = "Sobrevivente"), 
+         yaxis = list(title = "Percentual"))
+
+```
+

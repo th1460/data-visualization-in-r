@@ -1,0 +1,107 @@
+---
+title: "Google Trends | Busca por 'dengue' no Google no Brasil desde 2004"
+runtime: shiny
+output:
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    source_code: embed
+---
+
+```{r setup, include=FALSE}
+
+require(gtrendsR)
+require(magrittr)
+require(dplyr)
+require(xts)
+require(tbl2xts)
+require(dygraphs)
+require(flexdashboard)
+require(leaflet)
+
+```
+
+```{r global}
+
+uf <- read.csv2("dados.csv", stringsAsFactors = FALSE)
+
+```
+
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+
+<p align="justify">
+[Google Trends](https://pt.wikipedia.org/wiki/Google_Trends) é uma ferramenta da Google que mostra os mais populares **termos** pesquisados. O Dashboard mostra como foi a busca pelo termo "dengue", no Brasil. O Período poderá ser especificado a partir de 2004. Os "hits" são indicadores que variam de 0 à 100, sendo que o local ou o momento que obteve o maior volume recebe o escore 100, e os hits sucessivos são calculados a partir deste volume máximo.
+</p>
+
+```{r}
+
+dateRangeInput("daterange", tags$b("Periodo para analise:"), 
+               start = "2004-01-01", 
+               end = Sys.Date() - 1,
+               min = "2004-01-01",
+               max = Sys.Date() - 1,
+               separator = " - ")
+
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Interesse no tempo
+
+```{r}
+
+# ler os dados
+
+dataInput <- reactive({
+  gtrends("dengue", geo = "BR", time = paste(input$daterange[1], input$daterange[2]))
+  })
+
+renderDygraph({
+  
+  dengue <- dataInput()
+  
+dengue$interest_over_time %>% as_tibble() %>% 
+  select(date, hits) %>% 
+  tbl_xts() %>% 
+  dygraph(ylab = "Hits") %>% 
+  dyRangeSelector()
+})
+
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Interesse por UF
+
+```{r}
+
+renderLeaflet({
+  
+  dengue <- dataInput()
+  
+  uf %<>% 
+  left_join(x = ., 
+            dengue$interest_by_region %>% 
+              select(NM_ESTADO = location, hits) %>% as_tibble() %>% 
+              mutate(NM_ESTADO = iconv(NM_ESTADO, from = "utf-8", to = "ASCII//TRANSLIT") %>% 
+                       gsub("Federal District", "Distrito Federal", x = .) %>% 
+                       gsub("State of ", "", x = .) %>% toupper()), 
+            by = "NM_ESTADO")
+  
+  npal <- colorNumeric("RdYlBu", uf$hits, reverse = TRUE)
+  
+  leaflet(data = uf) %>% 
+  addTiles() %>% 
+  addCircleMarkers(lng = ~LON, lat = ~LAT, color = ~npal(hits), popup = ~NM_ESTADO) %>% 
+  addLegend(pal = npal,
+            values = ~hits,
+            opacity = 1,
+            title="Hits Dengue")
+
+})
+
+```
