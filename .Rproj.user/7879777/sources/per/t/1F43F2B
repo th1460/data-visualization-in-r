@@ -1,0 +1,27 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1559136437633.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "953165770",
+    "id" : "1F43F2B",
+    "lastKnownWriteTime" : 1559159755,
+    "last_content_update" : 1559159755170,
+    "path" : "~/GitHub/data-visualization-in-r/presentation.Rmd",
+    "project_path" : "presentation.Rmd",
+    "properties" : {
+        "cursorPosition" : "684,94",
+        "last_setup_crc32" : "1364BD615ec2845e",
+        "marks" : "<:0,0\n>:0,0",
+        "scrollLine" : "668"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

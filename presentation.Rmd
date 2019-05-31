@@ -9,7 +9,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, fig.align = "center")
 ```
 
 # Visualização de dados {data-background=#9292e8}
@@ -33,6 +33,7 @@ Alguns pacotes para visualização de dados no R:
 >- `library(graphics)`
 >- `library(ggplot2)`
 >- `library(plotly)`
+>- `library(leaflet)`
 >- `library(DT)`
 >- `library(crosstalk)`
 >- `library(flexdashboard)`
@@ -49,7 +50,6 @@ library(randomNames)
 library(lubridate)
 
 # conjunto de dados produzidos artificialmente
-
 set.seed(1233)
 dados <- tibble(Sexo = factor(rbinom(100, 1, .5), labels = c("Female", "Male")),
                 Ano = runif(100, 1950, 2010) %>% trunc(),
@@ -65,7 +65,6 @@ dados %>% glimpse()
 
 ## plot()
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 set.seed(10) # fixando a semente
@@ -75,7 +74,6 @@ y <- rnorm(10)
 plot(x, y, col = "blue") # cores disponíveis em colours()
 
 ```
-</center>
 
 ## Cores
 
@@ -91,7 +89,6 @@ Uma lista de cores no formato hexadecimal poderá ser encontrado em <https://www
 
 ## plot()
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 set.seed(10)
@@ -101,12 +98,10 @@ y <- rnorm(10)
 plot(x, y, col = "blue", type = "l", xlab = "Tempo", ylab = "Taxa")
 
 ```
-</center>
 
 ## points()
 
-<center>
-```{r fig.height=4, fig.width=6}
+```{r fig.height=3, fig.width=6}
 
 set.seed(10)
 x <- 1:10
@@ -117,12 +112,10 @@ plot(x, y, col = "blue", type = "l", xlab = "Tempo", ylab = "Taxa")
 points(x, z, col = "red", type = "b") # adicionando uma série de dados
 
 ```
-</center>
 
 ## ylim
 
-<center>
-```{r fig.height=4, fig.width=6}
+```{r fig.height=3, fig.width=6}
 
 set.seed(10)
 x <- 1:10
@@ -134,11 +127,9 @@ plot(x, y, col = "blue", type = "l", xlab = "Tempo", ylab = "Taxa",
 points(x, z, col = "red", type = "b")
 
 ```
-</center>
 
 ## types
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 set.seed(34)
@@ -150,12 +141,10 @@ plot(rnorm(10), type = "b", main = "type = 'b'")
 plot(rnorm(10), type = "s", main = "type = 's'")
 
 ```
-</center>
 
 ## lty
 
-<center>
-```{r fig.height=4, fig.width=6}
+```{r fig.height=3, fig.width=6}
 
 set.seed(34)
 
@@ -167,11 +156,9 @@ legend(8, 1, c("lty = 1", "lty = 2", "lty = 3", "lty = 4"), lty = 1:4, # inserin
        col = c("black", "red", "blue", "tomato"))
 
 ```
-</center>
 
 ## pch e grid()
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 set.seed(34)
@@ -183,11 +170,9 @@ legend(7.9, 1, c("pch = 19", "pch = 17"),
        col = c("blue", "red"), pch = c(19, 17))
 
 ```
-</center>
 
 ## lwd
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 set.seed(34)
@@ -199,11 +184,9 @@ legend(7.8, 1, c("lwd = 2", "lwd = 4"),
        col = c("blue", "red"), lwd = c(2, 4))
 
 ```
-</center>
 
 ## curve()
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 f <- function(x) (x - 3)*(x - 2)
@@ -211,11 +194,9 @@ f <- function(x) (x - 3)*(x - 2)
 curve(f, -2, 4, col = "blue")
 
 ```
-</center>
 
 ## curve(axes = FALSE)
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 f <- function(x) (x - 3)*(x - 2)
@@ -228,12 +209,10 @@ points(c(2, 3), c(0, 0), col = "blue", pch = 19)
 
 
 ```
-</center>
 
 ## curve(add = TRUE)
 
-<center>
-```{r fig.height=4, fig.width=6}
+```{r fig.height=3.2, fig.width=6}
 
 f <- function(x) exp(x)
 g <- function(x) -x^2 + 10
@@ -246,11 +225,9 @@ axis(2, las = 1, pos = 0, at = c(-Inf, seq(5, 20, 5)))
 legend(-4, 20, c("f", "g"), col = c("blue", "tomato"), lwd = 3)
 
 ```
-</center>
 
 ## abline
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 f <- function(x) 10 + 1/x
@@ -262,11 +239,9 @@ axis(2, las = 1, pos = 0)
 abline(h = 10, lty = 2, col = "tomato", lwd = 3) # adicionando uma linha vertical
 
 ```
-</center>
 
 ## hist()
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 set.seed(35)
@@ -275,11 +250,9 @@ x <- rnorm(100)
 hist(x, main = "Histograma", col = "red", border = FALSE)
 
 ```
-</center>
 
 ## pie()
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 x <- c(21, 62, 10, 53)
@@ -288,7 +261,6 @@ labels <- c("London", "New York", "Singapore", "Mumbai")
 pie(x, labels, border = FALSE)
 
 ```
-</center>
 
 ## Exercícios
 
@@ -313,7 +285,6 @@ titanic_train %>%
 
 ## ggplot() + geom_bar()
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 library(ggplot2)
@@ -322,11 +293,9 @@ titanic_train %>%
   ggplot(aes(Survived)) + geom_bar()
 
 ```
-</center>
 
 ## ggplot() + geom_bar()
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 titanic_train %>% 
@@ -338,11 +307,9 @@ titanic_train %>%
   labs(x = "Sobrevivente", y = "Percentual") # rótulo dos eixos x e y
 
 ```
-</center>
 
 ## ggplot() + geom_bar()
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 titanic_train %>% 
@@ -354,11 +321,9 @@ titanic_train %>%
   theme_minimal() # mudança de tema
 
 ```
-</center>
 
 ## ggplot() + geom_bar()
 
-<center>
 ```{r fig.height=3, fig.width=6}
 
 titanic_train %>% 
@@ -371,11 +336,33 @@ titanic_train %>%
   theme_minimal()
 
 ```
-</center>
+
+## scale_fill_brewer()
+
+```{r fig.height=3, fig.width=6}
+
+titanic_train %>% 
+  ggplot(aes(as.factor(Survived), (..count../sum(..count..)),
+             fill = Sex)) + # preenchimento da barra segundo sexo
+  geom_bar(alpha = .8, position = "fill") + # position = "fill" a barra é empilhada preenchendo 100%
+  scale_x_discrete(labels = c("Não", "Sim")) +
+  scale_y_continuous(labels = scales::percent) +
+  scale_fill_brewer("Sexo", palette = "Greens") + # alterar as cores
+  labs(x = "Sobrevivente", y = "Percentual", fill = "Sexo") + # o argumento 'fill' altera o título da legenda
+  theme_minimal()
+
+```
+
+## Lista de paletas
+
+```{r fig.height=5}
+
+RColorBrewer::display.brewer.all(colorblindFriendly = TRUE)
+
+```
 
 ## scale_fill_manual()
 
-<center>
 ```{r fig.height=3, fig.width=6}
 
 titanic_train %>% 
@@ -389,12 +376,9 @@ titanic_train %>%
   theme_minimal()
 
 ```
-</center>
-
 
 ## ggplot() + geom_bar() + facet_grid()
 
-<center>
 ```{r fig.height=3, fig.width=6}
 
 titanic_train %>% 
@@ -412,18 +396,15 @@ titanic_train %>%
 
 ## ggplot() + geom_boxplot()
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 titanic_train %>% 
   ggplot(aes(y = Age)) + geom_boxplot() # é necessário definir o y
 
 ```
-</center>
 
 ## ggplot() + geom_boxplot()
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 titanic_train %>% 
@@ -432,11 +413,9 @@ titanic_train %>%
   labs(x = "Sobrevivente", y = "Idade")
 
 ```
-</center>
 
 ## ggplot() + geom_boxplot()
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 titanic_train %>% 
@@ -445,11 +424,9 @@ titanic_train %>%
   labs(x = "Sobrevivente", y = "Idade", fill = "Sexo")
 
 ```
-</center>
 
 ## ggplot() + geom_boxplot() + facet_grid()
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 titanic_train %>% 
@@ -459,11 +436,9 @@ titanic_train %>%
   labs(x = "Sobrevivente", y = "Idade")
 
 ```
-</center>
 
 ## ggplot() + geom_boxplot() + facet_grid()
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 titanic_train %>% 
@@ -473,7 +448,6 @@ titanic_train %>%
   labs(x = "Sobrevivente", y = "Idade", fill = "Sexo")
 
 ```
-</center>
 
 ## Google Trends: Dengue
 
@@ -490,14 +464,12 @@ dengue$interest_over_time %>%
 
 ## ggplot() + geom_line()
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 dengue$interest_over_time %>% 
   ggplot(aes(date, hits)) + geom_line()
 
 ```
-</center>
 
 ## Google Trends: Times de futebol
 
@@ -512,33 +484,29 @@ times$interest_over_time %>%
 
 ## ggplot() + geom_line()
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 times$interest_over_time %>% 
   ggplot(aes(date, hits, colour = keyword)) + geom_line()
 
 ```
-</center>
 
 ## ggplot() + geom_line()
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 (g1 <- times$interest_over_time %>% 
   mutate(semanas = week(date)) %>% # criando a variável semana
   group_by(semanas, keyword) %>% # agregando segundo semanas e times
   summarise(hits = mean(hits)) %>% # agregando com a média
-  ggplot(aes(semanas, hits, colour = keyword)) + geom_line() +
-  labs(x = "Semanas", y = "Hits"))
+  ggplot(aes(semanas, hits, colour = keyword)) + geom_line(size = 1) +
+   scale_color_brewer("Times", palette = "Dark2") +
+   labs(x = "Semanas", y = "Hits"))
 
 ```
-</center>
 
 ## geom_rect() + geom_text()
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 g1 + geom_rect(aes(xmin = week("2018-06-14"), # início do período
@@ -549,11 +517,9 @@ g1 + geom_rect(aes(xmin = week("2018-06-14"), # início do período
             angle = 90, show_guide  = FALSE) 
 
 ```
-</center>
 
 ## geom_text()
 
-<center>
 ```{r fig.height=4, fig.width=6}
 
 titanic_train %>% 
@@ -565,7 +531,6 @@ titanic_train %>%
             vjust = 1.5, color = "white", size = 10) # vjust altera a posição vertical do texto
 
 ```
-</center>
 
 ## Exercícios
 
@@ -602,21 +567,108 @@ related <- dengue$related_queries %>%
 
 ## wordcloud()
 
-<center>
 ```{r fig.height=5, fig.width=5}
 
 wordcloud(words = related %>% pull(value), freq = related %>% pull(subject) %>% as.numeric,
           colors = brewer.pal(6, "Dark2"), random.order = FALSE)
 
 ```
-</center>
+
+## ggwordcloud
+
+```{r}
+
+empresas <- gtrends(c("Microsoft", "Google"), time = "2019-01-01 2019-05-27")
+related <- empresas$related_queries %>% 
+  filter(related_queries == "top") %>% 
+  select(subject, value, keyword) %>% 
+  mutate(value = iconv(value, from = "utf-8", to = "iso8859-1"))
+
+require(ggwordcloud)
+
+wc <- related %>% 
+  ggplot(aes(label = value, size = subject %>% as.numeric(), colour = subject %>% as.numeric())) +
+  geom_text_wordcloud_area(shape = "square") +
+  scale_size_area(max_size = 13) +
+  theme_minimal() +
+  scale_color_gradient(low = "gray", high = "springgreen3") +
+  facet_wrap(~keyword)
+
+```
+
+## ggwordcloud
+
+```{r echo = FALSE}
+
+wc
+
+```
+
+# library(sp) {data-background=#ff8080}
+
+## Mapa de área
+
+```{r}
+
+require(rgdal)
+require(sp)
+require(RColorBrewer)
+require(dplyr)
+require(magrittr)
+
+shape <- readOGR("./data/BRUFE250GC_SIR", "BRUFE250GC_SIR",
+                 verbose = FALSE,
+                 stringsAsFactors = FALSE,
+                 encoding = "utf-8",
+                 use_iconv = TRUE)
+
+shape@data %>% as_tibble()
+
+```
+
+## Mapa de área
+
+```{r fig.height=5, fig.width=5}
+
+plot(shape)
+
+```
+
+## Mapa de área
+
+```{r}
+
+set.seed(1057)
+dados <- tibble(CD_GEOCUF = c(43, 42, 41, 35, 31, 33, 32, 29, 28,
+                              26, 25, 24, 27, 23, 22, 21, 15, 13,
+                              16, 11, 14, 12, 51, 50, 53, 52, 17),
+                y = rnorm(27)) %>% 
+  mutate(CD_GEOCUF = CD_GEOCUF %>% as.character(),
+         y = cut(y, 4))
+
+shape@data %<>% left_join(dados, by = "CD_GEOCUF") 
+shape@data %>% as_tibble()
+
+```
+
+## Mapa de área
+
+```{r fig.height=5, fig.width=5}
+
+shape %>% spplot(zcol = "y", # variável de análise
+                 col.regions = brewer.pal(n = 4, name = "OrRd"), # paleta de cores
+                 col = "transparent", # cor das fronteiras
+                 par.settings = list(axis.line = list(col = 'transparent')) # sem frame
+                 )
+
+```
 
 # library(plotly) {data-background=#ff8080}
 
 ## ggplotly()
 
 <center>
-```{r fig.height=3.5, fig.width=6}
+```{r fig.height=3, fig.width=6}
 
 library(plotly)
 library(glue)
@@ -630,7 +682,6 @@ g2 <- titanic_train %>%
   scale_x_discrete(labels = c("Não", "Sim")) +
   scale_y_continuous(labels = scales::percent) +
   labs(x = "Sobrevivente", y = "Percentual", fill = "") + theme_minimal()
-
 ggplotly(g2, tooltip = "text") %>% config(displayModeBar = FALSE) %>% layout(hovermode = TRUE)
 
 ```
@@ -683,7 +734,7 @@ titanic_train %>%
 ## plot_ly()
 
 <center>
-```{r fig.height=4, fig.width=6}
+```{r fig.height=3.8, fig.width=6}
 
 titanic_train %>% 
   group_by(Survived, Sex) %>% summarise(n = n()) %>% 
@@ -701,7 +752,7 @@ titanic_train %>%
 ## plot_ly()
 
 <center>
-```{r fig.height=4, fig.width=6}
+```{r fig.height=3.5, fig.width=6}
 
 titanic_train %>% 
   group_by(Survived, Sex) %>% summarise(n = n()) %>% 
@@ -736,6 +787,7 @@ titanic_train %>%
 
 ## Instituto de Segurança Pública
 
+<center>
 ```{r}
 
 read.csv2("data/BaseEstadoTaxaMes.csv") %>% # lendo arquivo .csv
@@ -743,6 +795,7 @@ read.csv2("data/BaseEstadoTaxaMes.csv") %>% # lendo arquivo .csv
   glimpse()
 
 ```
+</center>
 
 ## plot_ly(mode = line)
 
@@ -764,7 +817,7 @@ read.csv2("data/BaseEstadoTaxaMes.csv") %>%
 ## add_trace()
 
 <center>
-```{r fig.height=4, fig.width=6}
+```{r fig.height=3.5, fig.width=6}
 
 read.csv2("data/BaseEstadoTaxaMes.csv") %>% 
   mutate(date = glue("{vano}-{mes}") %>% ymd(truncated = 1)) %>% # criando variável data com ano e mês
@@ -830,6 +883,22 @@ airquality %>%
 
 Use o heatmap.
 
+# library(leaflet) {data-background=#ff8080}
+
+## leaflet()
+
+<center>
+```{r fig.height=8, fig.height=4}
+
+require(leaflet)
+
+leaflet() %>%
+  addTiles() %>%  # layout da malha
+  addMarkers(lng = -43.1790855, lat = -22.9060598, popup = "Instituto Infnet")
+
+```
+</center>
+
 # library(DT) {data-background=#ff8080}
 
 ## datatable()
@@ -870,9 +939,7 @@ titanic_train %>%
 ```{r}
 
 library(readxl)
-
 countries <- read_xlsx("data/countries of the world.xlsx")
-
 countries %>% glimpse()
 
 ```
@@ -1028,6 +1095,8 @@ Para criar um `chunk`, use ` ```{r} ` e finalize-o com ` ``` `. No caso em que u
 
 - `eval` determina quais linhas devem ser executadas (default: `TRUE` são todas)
 
+##
+
 ````markdown
 `r ''````{r, eval=TRUE}
 data(cars)
@@ -1091,7 +1160,6 @@ output:
 
 Column {data-width=650}
 -----------------------------------------------------------------------
-
 ### Chart A
 
 `r ''````{r}
@@ -1100,7 +1168,6 @@ Column {data-width=650}
 
 Column {data-width=350}
 -----------------------------------------------------------------------
-
 ### Chart B
 
 `r ''````{r}
